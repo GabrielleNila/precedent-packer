@@ -49,6 +49,9 @@ export function AddMemberForm() {
             <option value="admin">Admin</option>
           </Select>
         </Field>
+        <Field label="Job title" htmlFor="job_title" hint="Shown in the letterhead, e.g. Paralegal, Senior Secretary">
+          <Input id="job_title" name="job_title" maxLength={60} autoComplete="off" />
+        </Field>
         <label className="flex items-center gap-2 text-sm font-semibold text-ink-soft sm:col-span-2">
           <input type="checkbox" name="is_solicitor" className="h-4 w-4 accent-[var(--color-accent)]" />
           Practising solicitor (can be the solicitor in charge of a matter)

@@ -32,6 +32,7 @@ export type Member = {
   is_solicitor: boolean;
   active: boolean;
   must_change_password: boolean;
+  job_title?: string | null;
 };
 
 export type MatterRow = {

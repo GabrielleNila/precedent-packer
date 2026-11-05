@@ -16,10 +16,21 @@ A project called **precedent-pack** exists in the **AW law** organisation, in th
 
 ### 2a. Create the database tables
 
+Run each file in `supabase/migrations/`, **in order**, once each:
+
+| Order | File | Added in |
+|---|---|---|
+| 1 | [`20261105000001_core_schema.sql`](supabase/migrations/20261105000001_core_schema.sql) | Phase 1 |
+| 2 | [`20261105000002_letters.sql`](supabase/migrations/20261105000002_letters.sql) | Phase 2 |
+
+For each one:
+
 1. Open the Supabase dashboard and click the **precedent-pack** project.
 2. In the left sidebar, click **SQL Editor**, then **New query**.
-3. On GitHub, open [`supabase/migrations/20261105000001_core_schema.sql`](supabase/migrations/20261105000001_core_schema.sql), click the **Copy raw file** button (two overlapping squares, top right of the file), and paste it into the SQL editor.
+3. On GitHub, open the file, click the **Copy raw file** button (two overlapping squares, top right of the file), and paste it into the SQL editor.
 4. Click **Run**. You should see *"Success. No rows returned."*
+
+> Each later phase that changes the database adds one more numbered file here. Run only the new one.
 
 ### 2b. Turn off public sign-ups
 

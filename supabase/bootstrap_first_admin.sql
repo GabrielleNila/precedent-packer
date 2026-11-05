@@ -1,5 +1,5 @@
 -- Run ONCE in the Supabase SQL editor, after:
---   1. the schema (migrations/20261105000001_core_schema.sql) has been run, and
+--   1. both migrations in supabase/migrations/ have been run, in order, and
 --   2. you have created your own login under Authentication > Users > Add user.
 --
 -- Replace the two values marked CHANGE ME, then run. It creates the firm and
@@ -10,11 +10,12 @@ with firm as (
   values ('A.W. Law LLC', '201919619Z', '133 New Bridge Road #20-03 Chinatown Point Singapore 059413')
   returning id
 )
-insert into public.members (user_id, firm_id, full_name, initials, email, role, is_solicitor, must_change_password)
+insert into public.members (user_id, firm_id, full_name, initials, email, role, is_solicitor, must_change_password, job_title)
 select u.id, firm.id,
        'Hanzalah bin Azmi',          -- CHANGE ME if needed: your full name
        'HA',                         -- CHANGE ME if needed: your initials
-       u.email, 'admin', false, false
+       u.email, 'admin', false, false,
+       'Intern'                      -- CHANGE ME if needed: title shown in the letterhead
 from auth.users u, firm
 where u.email = 'you@awlaw.com.sg';  -- CHANGE ME: the email you just created
 
