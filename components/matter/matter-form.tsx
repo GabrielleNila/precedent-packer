@@ -53,7 +53,14 @@ export function MatterForm({
   const isNew = !initial.id;
   const dirty = formState.isDirty;
 
-  // Warn before leaving with unsaved changes.
+  // Warn before leaving with unsaved changes (browser close/refresh, and
+  // the matter tabs, which read this flag).
+  useEffect(() => {
+    (window as unknown as { __ppDirty?: boolean }).__ppDirty = dirty;
+    return () => {
+      (window as unknown as { __ppDirty?: boolean }).__ppDirty = false;
+    };
+  }, [dirty]);
   useEffect(() => {
     if (!dirty) return;
     const handler = (e: BeforeUnloadEvent) => e.preventDefault();

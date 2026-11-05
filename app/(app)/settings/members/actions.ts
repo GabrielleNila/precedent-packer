@@ -18,6 +18,7 @@ const schema = z.object({
   email: z.string().trim().toLowerCase().email("Enter a valid email"),
   role: z.enum(["admin", "member"]),
   is_solicitor: z.boolean(),
+  job_title: z.string().trim().max(60).optional(),
 });
 
 // Readable temporary password, e.g. "plum-6481-meadow-2093".
@@ -36,6 +37,7 @@ export async function addMember(_prev: AddMemberState, formData: FormData): Prom
     email: formData.get("email"),
     role: formData.get("role"),
     is_solicitor: formData.get("is_solicitor") === "on",
+    job_title: formData.get("job_title") ?? undefined,
   });
   if (!parsed.success) return { status: "error", error: parsed.error.issues[0]?.message ?? "Check the details" };
   const v = parsed.data;
@@ -60,6 +62,7 @@ export async function addMember(_prev: AddMemberState, formData: FormData): Prom
     email: v.email,
     role: v.role,
     is_solicitor: v.is_solicitor,
+    job_title: v.job_title || null,
     must_change_password: true,
   });
   if (memberError) {

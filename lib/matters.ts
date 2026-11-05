@@ -62,14 +62,14 @@ export async function getMatter(id: string): Promise<MatterBundle | null> {
   };
 }
 
-export type TeamMember = Pick<Member, "user_id" | "full_name" | "initials" | "is_solicitor" | "active" | "role" | "email">;
+export type TeamMember = Pick<Member, "user_id" | "full_name" | "initials" | "is_solicitor" | "active" | "role" | "email"> & { job_title?: string | null };
 
 export async function listTeam(): Promise<TeamMember[]> {
   await getCurrentMember();
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("members")
-    .select("user_id, full_name, initials, is_solicitor, active, role, email")
+    .select("user_id, full_name, initials, is_solicitor, active, role, email, job_title")
     .order("full_name");
   if (error) throw new Error(error.message);
   return (data ?? []) as TeamMember[];

@@ -39,7 +39,7 @@ async function Members() {
                 </span>
                 <div>
                   <p className="font-bold text-ink">
-                    {m.full_name} <span className="font-normal text-muted">· {m.initials}</span>
+                    {m.full_name} <span className="font-normal text-muted">· {m.initials}{m.job_title ? ` · ${m.job_title}` : ""}</span>
                   </p>
                   <p className="text-[13px] text-muted">{m.email}</p>
                 </div>
