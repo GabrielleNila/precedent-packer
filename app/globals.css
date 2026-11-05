@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+/* Precedent Pack: soft and friendly. Cream paper, blush pink as the main
+   accent, lavender and mint as companions. Text stays a deep plum so
+   everything remains easy to read. */
+@theme {
+  --color-paper: #fdf8f1;          /* cream background */
+  --color-surface: #ffffff;
+  --color-ink: #3b3247;            /* deep plum text */
+  --color-ink-soft: #5f566d;
+  --color-muted: #8a8197;
+  --color-line: #f0e6e0;
+  --color-line-strong: #e4d6d2;
+
+  --color-accent: #c0587a;         /* blush, deep enough for white text */
+  --color-accent-hover: #a8476a;
+  --color-accent-soft: #fde8ee;    /* blush, pale */
+  --color-blush: #f7cdd9;
+
+  --color-lavender: #8f7bd1;
+  --color-lavender-soft: #efeafc;
+  --color-lavender-mid: #ddd3f7;
+
+  --color-mint: #3f9476;
+  --color-mint-soft: #e4f6ee;
+  --color-mint-mid: #c6ecdc;
+
+  --color-warn: #9a6a12;
+  --color-warn-soft: #fff4dc;
+  --color-danger: #b23a48;
+  --color-danger-soft: #fdebed;
+  --color-ok: #3f9476;
+  --color-ok-soft: #e4f6ee;
+
+  --font-sans: "Nunito Variable", ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Nunito Variable", ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background:
+    radial-gradient(1100px 520px at 8% -10%, #fde8ee 0%, transparent 60%),
+    radial-gradient(900px 480px at 100% 0%, #efeafc 0%, transparent 55%),
+    radial-gradient(800px 600px at 50% 110%, #e4f6ee 0%, transparent 60%),
+    var(--color-paper);
+  background-attachment: fixed;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-lavender);
+  outline-offset: 2px;
+}
+
+input, select, textarea, button {
+  font: inherit;
+}
+
+::selection {
+  background: var(--color-blush);
+}
