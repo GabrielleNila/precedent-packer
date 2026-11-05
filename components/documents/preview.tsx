@@ -37,8 +37,8 @@ export function DocumentPreview({ model, overrides, onOverride }: { model: DocMo
     <div className="overflow-x-auto rounded-3xl bg-gradient-to-br from-lavender-soft/60 via-paper to-mint-soft/50 p-4 sm:p-6">
       <article
         aria-label="Document preview"
-        className="mx-auto w-[794px] max-w-none bg-white px-[72px] pb-12 pt-10 text-black shadow-[0_8px_30px_-12px_rgba(59,50,71,0.35)]"
-        style={{ fontFamily: `"${f.font}", "Times New Roman", serif`, fontSize: `${f.fontSizePt * 1.333}px`, lineHeight: f.lineSpacing }}
+        className="mx-auto w-[794px] max-w-none bg-white pb-12 pt-10 text-black shadow-[0_8px_30px_-12px_rgba(59,50,71,0.35)]"
+        style={{ paddingLeft: `${f.marginInches * 96}px`, paddingRight: `${f.marginInches * 96}px`, fontFamily: `"${f.font}", "Times New Roman", serif`, fontSize: `${f.fontSizePt * 1.333}px`, lineHeight: f.lineSpacing }}
       >
         {model.letterhead && <LetterheadPreview lh={model.letterhead} />}
         {model.blocks.map((blk, i) => (
@@ -61,7 +61,7 @@ function LetterheadPreview({ lh }: { lh: NonNullable<DocModel["letterhead"]> }) 
   return (
     <header className="mb-6 flex items-center gap-6 font-[Arial,sans-serif] text-[11.5px] leading-[1.3]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={lh.logoUrl} alt="Firm logo" className="h-[95px] w-[190px] shrink-0 object-contain" />
+      <img src={lh.logoUrl} alt="Firm logo" className="h-[72px] w-[144px] shrink-0 object-contain" />
       <div>
         <table className="border-collapse">
           <tbody>

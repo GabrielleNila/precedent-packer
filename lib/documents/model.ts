@@ -75,6 +75,8 @@ export type DocFormat = {
   justified: boolean;
   /** "dot" = a. / i. (firm letters); "paren" = (a) / (i) (pleadings). */
   subNumbering: "dot" | "paren";
+  /** Page margin on all four sides, in inches. */
+  marginInches: number;
 };
 
 export type DocModel = {

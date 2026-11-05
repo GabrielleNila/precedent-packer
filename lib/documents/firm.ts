@@ -30,11 +30,12 @@ export const DEFAULT_LETTERHEAD: FirmLetterhead = {
 };
 
 export const DEFAULT_LETTER_FORMAT: DocFormat = {
-  font: "Times New Roman",
+  font: "Arial",
   fontSizePt: 12,
   lineSpacing: 1.5,
   justified: true,
   subNumbering: "dot",
+  marginInches: 1.38,
 };
 
 export const DEFAULT_COURT_FORMAT: DocFormat = {
@@ -43,6 +44,7 @@ export const DEFAULT_COURT_FORMAT: DocFormat = {
   lineSpacing: 1.5,
   justified: true,
   subNumbering: "paren",
+  marginInches: 1,
 };
 
 type Json = Record<string, unknown> | null | undefined;
@@ -59,5 +61,7 @@ export function mergeFormat(stored: Json, fallback: DocFormat): DocFormat {
     lineSpacing: typeof s.lineSpacing === "number" ? s.lineSpacing : fallback.lineSpacing,
     justified: typeof s.justified === "boolean" ? s.justified : fallback.justified,
     subNumbering: s.subNumbering === "dot" || s.subNumbering === "paren" ? s.subNumbering : fallback.subNumbering,
+    marginInches:
+      typeof s.marginInches === "number" && s.marginInches >= 0.5 && s.marginInches <= 2.5 ? s.marginInches : fallback.marginInches,
   };
 }

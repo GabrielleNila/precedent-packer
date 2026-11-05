@@ -26,8 +26,7 @@ import type { Block, DocModel, LetterheadData, Run } from "./model";
 
 // Word measures in twentieths of a point ("twips"). A4 = 11906 x 16838.
 const A4 = { width: 11906, height: 16838 };
-const MARGIN = { top: 1134, bottom: 1134, left: 1440, right: 1304 }; // ~2cm / 2.54cm / 2.3cm
-const CONTENT_WIDTH = A4.width - MARGIN.left - MARGIN.right;
+const LOGO_COL = 2650; // ~1.7in for the logo; the writer block takes the rest
 const NUMBERING_REF = "pp-paragraphs";
 const LETTERHEAD_FONT = "Arial";
 const SCRIPT_FONT = "Monotype Corsiva";
@@ -63,15 +62,17 @@ function spacing(model: DocModel, after: "none" | "small" | "normal" = "normal")
   return { line: Math.round(240 * model.format.lineSpacing), after: afterTwips };
 }
 
-function letterheadHeader(lh: LetterheadData, assets: DocxAssets): Header {
+function letterheadHeader(lh: LetterheadData, assets: DocxAssets, contentWidth: number): Header {
+  const infoWidth = contentWidth - LOGO_COL;
+  const valueWidth = infoWidth - 1350 - 200;
   const small = 18; // 9pt, in half-points
   const infoRows = lh.rows.map(
     (row) =>
       new TableRow({
         children: [
-          cell(1500, [new Paragraph({ spacing: TIGHT, children: [new TextRun({ text: row.label, font: LETTERHEAD_FONT, size: small })] })]),
-          cell(250, [new Paragraph({ spacing: TIGHT, children: [new TextRun({ text: ":", font: LETTERHEAD_FONT, size: small })] })]),
-          cell(3950, [
+          cell(1350, [new Paragraph({ spacing: TIGHT, children: [new TextRun({ text: row.label, font: LETTERHEAD_FONT, size: small })] })]),
+          cell(200, [new Paragraph({ spacing: TIGHT, children: [new TextRun({ text: ":", font: LETTERHEAD_FONT, size: small })] })]),
+          cell(valueWidth, [
             new Paragraph({
               spacing: TIGHT,
               children: [
@@ -88,8 +89,8 @@ function letterheadHeader(lh: LetterheadData, assets: DocxAssets): Header {
 
   const info = new Table({
     layout: TableLayoutType.FIXED,
-    width: { size: 5700, type: WidthType.DXA },
-    columnWidths: [1500, 250, 3950],
+    width: { size: infoWidth, type: WidthType.DXA },
+    columnWidths: [1350, 200, valueWidth],
     borders: NO_BORDERS,
     rows: infoRows,
   });
@@ -102,7 +103,7 @@ function letterheadHeader(lh: LetterheadData, assets: DocxAssets): Header {
             new ImageRun({
               type: "png",
               data: assets.logo,
-              transformation: { width: 190, height: 95 },
+              transformation: { width: 144, height: 72 },
               altText: { title: "Firm logo", description: "Firm logo", name: "logo" },
             }),
           ],
@@ -111,21 +112,21 @@ function letterheadHeader(lh: LetterheadData, assets: DocxAssets): Header {
     : [new Paragraph({ spacing: TIGHT, children: [new TextRun({ text: "", font: LETTERHEAD_FONT })] })];
 
   const addressLines = [lh.addressLine, lh.extraLine].filter(Boolean).map(
-    (line) => new Paragraph({ spacing: { ...TIGHT, before: 40 }, children: [new TextRun({ text: line!, font: LETTERHEAD_FONT, size: small })] }),
+    (line) => new Paragraph({ spacing: { ...TIGHT, before: 40 }, children: [new TextRun({ text: line!, font: LETTERHEAD_FONT, size: small - 2 })] }),
   );
 
   return new Header({
     children: [
       new Table({
         layout: TableLayoutType.FIXED,
-        width: { size: CONTENT_WIDTH, type: WidthType.DXA },
-        columnWidths: [CONTENT_WIDTH - 5900, 5900],
+        width: { size: contentWidth, type: WidthType.DXA },
+        columnWidths: [LOGO_COL, infoWidth],
         borders: NO_BORDERS,
         rows: [
           new TableRow({
             children: [
-              cell(CONTENT_WIDTH - 5900, logoCell, VerticalAlignTable.CENTER),
-              cell(5900, [info, ...addressLines]),
+              cell(LOGO_COL, logoCell, VerticalAlignTable.CENTER),
+              cell(infoWidth, [info, ...addressLines]),
             ],
           }),
         ],
@@ -169,7 +170,8 @@ function letterFooter(lh: LetterheadData): Footer {
   });
 }
 
-function blockToDocx(blk: Block, model: DocModel): (Paragraph | Table)[] {
+function blockToDocx(blk: Block, model: DocModel, contentWidth: number): (Paragraph | Table)[] {
+  const CONTENT_WIDTH = contentWidth;
   const justify = model.format.justified ? AlignmentType.JUSTIFIED : AlignmentType.LEFT;
   switch (blk.type) {
     case "spacer":
@@ -269,7 +271,9 @@ export function buildDocx(model: DocModel, assets: DocxAssets = {}): Document {
     };
   };
 
-  const children: (Paragraph | Table)[] = model.blocks.flatMap((blk) => blockToDocx(blk, model));
+  const margin = Math.round(model.format.marginInches * 1440);
+  const contentWidth = A4.width - 2 * margin;
+  const children: (Paragraph | Table)[] = model.blocks.flatMap((blk) => blockToDocx(blk, model, contentWidth));
   const lh = model.letterhead;
 
   return new Document({
@@ -288,9 +292,9 @@ export function buildDocx(model: DocModel, assets: DocxAssets = {}): Document {
       {
         properties: {
           titlePage: Boolean(lh),
-          page: { size: A4, margin: { ...MARGIN, header: 567, footer: 454 } },
+          page: { size: A4, margin: { top: margin, bottom: margin, left: margin, right: margin, header: 567, footer: 454 } },
         },
-        headers: lh ? { first: letterheadHeader(lh, assets), default: new Header({ children: [] }) } : undefined,
+        headers: lh ? { first: letterheadHeader(lh, assets, contentWidth), default: new Header({ children: [] }) } : undefined,
         footers: lh ? { first: letterFooter(lh), default: letterFooter(lh) } : undefined,
         children,
       },

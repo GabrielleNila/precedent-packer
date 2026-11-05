@@ -22,6 +22,7 @@ Run each file in `supabase/migrations/`, **in order**, once each:
 |---|---|---|
 | 1 | [`20261105000001_core_schema.sql`](supabase/migrations/20261105000001_core_schema.sql) | Phase 1 |
 | 2 | [`20261105000002_letters.sql`](supabase/migrations/20261105000002_letters.sql) | Phase 2 |
+| 3 | [`20261105000003_letter_format_arial.sql`](supabase/migrations/20261105000003_letter_format_arial.sql) | Phase 2 (Arial, 1.38" margins) |
 
 For each one:
 
